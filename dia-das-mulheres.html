@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8 de Março — Dia Internacional da Mulher</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:    #e8426a;
+      --blush:   #f7b8c8;
+      --petal:   #fce8ee;
+      --cream:   #fff8f2;
+      --earth:   #2a1a1f;
+      --muted:   #7a4f5a;
+      --gold:    #d4945b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--earth);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.5;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      background: var(--earth);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      bottom: -120px; right: -120px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--rose) 0%, transparent 70%);
+      opacity: 0.3;
+    }
+
+    .date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--rose);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 100px;
+      width: fit-content;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      color: #fff;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--blush);
+    }
+
+    .hero-subtitle {
+      margin-top: 28px;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      max-width: 360px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .hero-cta {
+      margin-top: 48px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+
+    .btn-primary { background: var(--rose); color: #fff; }
+    .btn-secondary { background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.25); }
+
+    .hero-right {
+      background: var(--petal);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(232,66,106,0.12) 0%, transparent 60%);
+    }
+
+    /* Big decorative "8" */
+    .big-eight {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(200px, 28vw, 360px);
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--rose);
+      line-height: 1;
+      opacity: 0;
+      animation: fadeScale 1.2s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .flowers-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .flower {
+      position: absolute;
+      font-size: 2rem;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    .flower:nth-child(1)  { top: 8%;  left: 10%; animation-delay: 0s;    font-size: 2.5rem; }
+    .flower:nth-child(2)  { top: 18%; right: 12%; animation-delay: 1s;   font-size: 1.5rem; }
+    .flower:nth-child(3)  { top: 55%; left: 5%;  animation-delay: 2s;    font-size: 1.8rem; }
+    .flower:nth-child(4)  { bottom: 15%; right: 8%; animation-delay: 0.5s; font-size: 2rem; }
+    .flower:nth-child(5)  { bottom: 30%; left: 18%; animation-delay: 1.5s; font-size: 1.4rem; }
+    .flower:nth-child(6)  { top: 35%; right: 5%;  animation-delay: 3s;   font-size: 1.2rem; }
+
+    /* ── RIBBON STRIP ── */
+    .ribbon {
+      background: var(--rose);
+      color: #fff;
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ribbon-track {
+      display: inline-flex;
+      gap: 60px;
+      animation: ticker 22s linear infinite;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .ribbon-track span { display: inline-flex; align-items: center; gap: 20px; }
+    .ribbon-track span::after { content: '✦'; opacity: 0.6; }
+
+    /* ── QUOTES SECTION ── */
+    .quotes {
+      padding: 100px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 16px;
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--earth);
+      max-width: 600px;
+    }
+
+    .section-heading em { font-style: italic; color: var(--rose); }
+
+    .quotes-grid {
+      margin-top: 64px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .quote-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid rgba(232,66,106,0.1);
+    }
+
+    .quote-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(232,66,106,0.12);
+    }
+
+    .quote-card::before {
+      content: '\201C';
+      font-family: 'Playfair Display', serif;
+      font-size: 8rem;
+      color: var(--petal);
+      position: absolute;
+      top: -20px; left: 16px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .quote-card:nth-child(2) { margin-top: 36px; background: var(--earth); color: #fff; }
+    .quote-card:nth-child(2)::before { color: rgba(255,255,255,0.06); }
+    .quote-card:nth-child(2) .quote-text { color: rgba(255,255,255,0.85); }
+    .quote-card:nth-child(2) .quote-author { color: var(--blush); }
+
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.65;
+      color: var(--earth);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 24px;
+    }
+
+    .quote-author {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rose);
+    }
+
+    /* ── HISTORY ── */
+    .history {
+      background: var(--earth);
+      padding: 100px 60px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .history::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, var(--rose) 0%, transparent 65%);
+      opacity: 0.12;
+    }
+
+    .history-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .history-left .section-label { color: var(--blush); }
+    .history-left .section-heading { color: #fff; }
+    .history-left .section-heading em { color: var(--blush); }
+
+    .history-p {
+      margin-top: 28px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.2s;
+    }
+
+    .tl-item:last-child { border-bottom: none; }
+
+    .tl-year {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--blush);
+      padding-top: 3px;
+    }
+
+    .tl-content h4 {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .tl-content p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+    }
+
+    /* ── PILLARS ── */
+    .pillars {
+      padding: 100px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .pillars-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .pillar {
+      background: linear-gradient(145deg, var(--petal), #fff);
+      border-radius: 24px;
+      padding: 40px 28px;
+      text-align: center;
+      transition: transform 0.3s;
+      border: 1px solid rgba(232,66,106,0.08);
+    }
+
+    .pillar:hover { transform: translateY(-8px); }
+
+    .pillar-icon {
+      font-size: 2.6rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .pillar h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--earth);
+      margin-bottom: 12px;
+    }
+
+    .pillar p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── MANIFESTO ── */
+    .manifesto {
+      background: var(--rose);
+      padding: 100px 60px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .manifesto::before {
+      content: '♀';
+      position: absolute;
+      font-size: 500px;
+      color: rgba(255,255,255,0.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .manifesto-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .manifesto h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 28px;
+    }
+
+    .manifesto p {
+      font-size: 1.05rem;
+      opacity: 0.85;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .manifesto-words {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 48px;
+    }
+
+    .manifesto-words span {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      transition: background 0.2s;
+    }
+    .manifesto-words span:hover { background: rgba(255,255,255,0.28); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--earth);
+      padding: 48px 60px;
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.82rem;
+      line-height: 1.8;
+    }
+
+    footer strong { color: rgba(255,255,255,0.7); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeScale {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%       { transform: translateY(-16px) rotate(8deg); }
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 50vh; }
+      .quotes-grid { grid-template-columns: 1fr; }
+      .quotes-grid .quote-card:nth-child(2) { margin-top: 0; }
+      .history-inner { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr 1fr; }
+      .quotes, .pillars, .history, .manifesto { padding: 70px 28px; }
+      .history { padding: 70px 28px; }
+    }
+
+    @media (max-width: 540px) {
+      .hero-left { padding: 60px 28px; }
+      .pillars-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-left">
+      <span class="date-badge">✦ 8 de Março</span>
+      <h1 class="hero-title">
+        Dia<br>
+        <em>Internacional</em><br>
+        da Mulher
+      </h1>
+      <p class="hero-subtitle">
+        Uma data que celebra conquistas, honra lutas e reafirma o compromisso por um mundo mais justo, igualitário e humano.
+      </p>
+      <div class="hero-cta">
+        <a href="#manifesto" class="btn btn-primary">Celebrar</a>
+        <a href="#historia" class="btn btn-secondary">Conhecer a história</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="flowers-wrap">
+        <span class="flower">🌸</span>
+        <span class="flower">🌷</span>
+        <span class="flower">🌺</span>
+        <span class="flower">🌹</span>
+        <span class="flower">✿</span>
+        <span class="flower">🌼</span>
+      </div>
+      <span class="big-eight">8</span>
+    </div>
+  </section>
+
+  <!-- ── RIBBON ── -->
+  <div class="ribbon">
+    <div class="ribbon-track">
+      <span>Igualdade</span>
+      <span>Empoderamento</span>
+      <span>Resistência</span>
+      <span>Solidariedade</span>
+      <span>Liberdade</span>
+      <span>Força</span>
+      <span>Dignidade</span>
+      <span>Direitos</span>
+      <span>Justiça</span>
+      <span>Igualdade</span>
+      <span>Empoderamento</span>
+      <span>Resistência</span>
+      <span>Solidariedade</span>
+      <span>Liberdade</span>
+      <span>Força</span>
+      <span>Dignidade</span>
+      <span>Direitos</span>
+      <span>Justiça</span>
+    </div>
+  </div>
+
+  <!-- ── QUOTES ── -->
+  <section class="quotes">
+    <p class="section-label reveal">Palavras que inspiram</p>
+    <h2 class="section-heading reveal">Vozes que <em>transformaram</em> o mundo</h2>
+
+    <div class="quotes-grid">
+      <div class="quote-card reveal">
+        <p class="quote-text">Não me deixo apanhar pelas lágrimas. A mulher forte não chora — ela cria, ela luta, ela renova.</p>
+        <span class="quote-author">Cora Coralina</span>
+      </div>
+      <div class="quote-card reveal">
+        <p class="quote-text">Ninguém nasce mulher: torna-se mulher. Nenhum destino biológico, psíquico ou econômico define a figura humana.</p>
+        <span class="quote-author">Simone de Beauvoir</span>
+      </div>
+      <div class="quote-card reveal">
+        <p class="quote-text">Se você quer que algo seja dito, peça a um homem. Se quer que algo seja feito, peça a uma mulher.</p>
+        <span class="quote-author">Margaret Thatcher</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HISTORY ── -->
+  <section class="history" id="historia">
+    <div class="history-inner">
+      <div class="history-left reveal">
+        <p class="section-label">A história por trás da data</p>
+        <h2 class="section-heading">Uma luta que <em>atravessa séculos</em></h2>
+        <p class="history-p">
+          O 8 de março não é apenas uma celebração — é um grito de resistência. A data reúne décadas de movimentos, tragédias e vitórias que moldaram o papel da mulher na sociedade.
+        </p>
+        <p class="history-p" style="margin-top:16px">
+          Desde as operárias do século XIX até os movimentos contemporâneos, cada conquista foi escrita com determinação, coragem e coletividade.
+        </p>
+      </div>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <span class="tl-year">1857</span>
+          <div class="tl-content">
+            <h4>Greve das Operárias em Nova York</h4>
+            <p>Trabalhadoras têxteis protestam por melhores condições de trabalho e redução da jornada de 16 horas.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1908</span>
+          <div class="tl-content">
+            <h4>Marcha por Direitos em Nova York</h4>
+            <p>Mais de 15.000 mulheres marcham pedindo voto, fim do trabalho infantil e melhores salários.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1910</span>
+          <div class="tl-content">
+            <h4>Criação do Dia Internacional</h4>
+            <p>Clara Zetkin propõe a criação de um dia internacional da mulher na Conferência Internacional de Mulheres Socialistas.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1975</span>
+          <div class="tl-content">
+            <h4>Reconhecimento da ONU</h4>
+            <p>A ONU oficializa o 8 de março como Dia Internacional da Mulher, no Ano Internacional da Mulher.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">Hoje</span>
+          <div class="tl-content">
+            <h4>Luta Contínua</h4>
+            <p>Equidade salarial, combate à violência, representatividade política e autonomia corporal seguem como pautas urgentes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PILLARS ── -->
+  <section class="pillars">
+    <div class="pillars-header reveal">
+      <p class="section-label">Nossas bandeiras</p>
+      <h2 class="section-heading" style="margin: 0 auto; text-align:center;">O que <em>defendemos</em> juntas</h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar reveal">
+        <span class="pillar-icon">⚖️</span>
+        <h3>Igualdade Salarial</h3>
+        <p>Mesma função, mesmo salário. A disparidade de gênero no mercado de trabalho precisa ser eliminada.</p>
+      </div>
+      <div class="pillar reveal">
+        <span class="pillar-icon">🛡️</span>
+        <h3>Fim da Violência</h3>
+        <p>Toda mulher tem direito de viver sem medo. Combater o feminicídio e a violência doméstica é urgente.</p>
+      </div>
+      <div class="pillar reveal">
+        <span class="pillar-icon">🎓</span>
+        <h3>Educação para Todas</h3>
+        <p>Acesso à educação de qualidade é transformador — para as mulheres e para toda a sociedade.</p>
+      </div>
+      <div class="pillar reveal">
+        <span class="pillar-icon">🏛️</span>
+        <h3>Representatividade</h3>
+        <p>Mais mulheres na política, na ciência, nas artes e em todos os espaços de decisão e poder.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MANIFESTO ── -->
+  <section class="manifesto" id="manifesto">
+    <div class="manifesto-inner">
+      <h2>Hoje e sempre,<br>pela mulher.</h2>
+      <p>
+        Celebramos cada mulher — na sua força silenciosa e na sua voz que ecoa. Honramos as que vieram antes, caminhamos ao lado das que estão aqui e abrimos espaço para as que virão.
+      </p>
+      <p>
+        O 8 de março não é um dia de flores — é um dia de memória, de luta e de esperança renovada.
+      </p>
+      <div class="manifesto-words">
+        <span>Resistência</span>
+        <span>Amor</span>
+        <span>Força</span>
+        <span>Sororidade</span>
+        <span>Conquista</span>
+        <span>Liberdade</span>
+        <span>Voz</span>
+        <span>Futuro</span>
+        <span>União</span>
+        <span>Direitos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p><strong>8 de Março — Dia Internacional da Mulher</strong></p>
+    <p>🌸 Em homenagem a todas as mulheres que tornaram este mundo mais justo, corajoso e belo.</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          e.target.style.transitionDelay = `${i * 0.05}s`;
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
